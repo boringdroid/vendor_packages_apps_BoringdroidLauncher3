@@ -4,8 +4,8 @@ buildscript {
         google()
     }
     dependencies {
-        classpath GRADLE_CLASS_PATH
-        classpath PROTOBUF_CLASS_PATH
+        classpath "com.android.tools.build:gradle:3.5.1"
+        classpath "com.google.protobuf:protobuf-gradle-plugin:0.8.8"
     }
 }
 
