@@ -606,6 +606,11 @@ public class NavbarButtonsViewController implements TaskbarControllers.LoggableT
     }
 
     private void updateNavButtonInAppDisplayProgressForSysui() {
+        // region @boringdroid
+        if (mControllers == null) {
+            return;
+        }
+        // endregion
         TaskbarUIController uiController = mControllers.uiController;
         if (uiController instanceof LauncherTaskbarUIController) {
             ((LauncherTaskbarUIController) uiController).onTaskbarInAppDisplayProgressUpdate(
@@ -620,6 +625,11 @@ public class NavbarButtonsViewController implements TaskbarControllers.LoggableT
         if (isPhoneButtonNavMode(mContext)) {
             return;
         }
+        // region @boringdroid
+        if (mControllers == null) {
+            return;
+        }
+        // endregion
         final float normalTranslationY = mTaskbarNavButtonTranslationY.value;
         final float imeAdjustmentTranslationY = mTaskbarNavButtonTranslationYForIme.value;
         TaskbarUIController uiController = mControllers.uiController;
@@ -817,7 +827,12 @@ public class NavbarButtonsViewController implements TaskbarControllers.LoggableT
             rotateDrawable.setDrawable(mContext.getDrawable(R.drawable.ic_sysbar_back));
             rotateDrawable.setFromDegrees(0f);
             rotateDrawable.setToDegrees(Utilities.isRtl(mContext.getResources()) ? 90f : -90f);
-            mBackButton.setImageDrawable(rotateDrawable);
+            // region @boringdroid
+            // mBackButton.setImageDrawable(rotateDrawable);
+            if (mBackButton != null) {
+                mBackButton.setImageDrawable(rotateDrawable);
+            }
+            // endregion
 
             // Setup normal 3 button
             // Add spacing after the end of the last nav button
