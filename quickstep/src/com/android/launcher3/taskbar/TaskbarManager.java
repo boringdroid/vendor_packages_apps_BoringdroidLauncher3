@@ -414,6 +414,16 @@ public class TaskbarManager {
 
             destroyExistingTaskbar();
 
+            // region boringdroid
+            // When BoringdroidSystemUI is active, it injects its own PC-like taskbar into
+            // the SystemUI NavigationBar. We must not also create the Launcher3 Taskbar
+            // window, which would overlay and visually hide the plugin's views.
+            if (SystemProperties.getBoolean("persist.sys.systemuiplugin.enabled", false)) {
+                SystemUiProxy.INSTANCE.get(mContext)
+                    .notifyTaskbarStatus(/* visible */ false, /* stashed */ false);
+                return;
+            }
+            // endregion
             boolean isTaskbarEnabled = dp != null && isTaskbarPresent(dp);
             debugWhyTaskbarNotDestroyed("recreateTaskbar: isTaskbarEnabled=" + isTaskbarEnabled
                 + " [dp != null (i.e. mUserUnlocked)]=" + (dp != null)
