@@ -188,7 +188,15 @@ public class RecentsAnimationDeviceState implements DisplayInfoChangeListener {
         try {
             mPipIsActive = ActivityTaskManager.getService().getRootTaskInfo(
                     WINDOWING_MODE_PINNED, ACTIVITY_TYPE_UNDEFINED) != null;
-        } catch (RemoteException e) {
+        // region boringdroid
+        // getRootTaskInfo() requires MANAGE_ACTIVITY_TASKS (signature|recents), which
+        // is granted only to the package named in config_recentsComponentName. In
+        // boringdroid that points at BoringdroidSystemUI, not this Launcher3, so the
+        // call throws SecurityException at HOME cold-start. Treat it the same as the
+        // existing RemoteException path — leave mPipIsActive=false and continue —
+        // instead of taking down the launcher process.
+        } catch (RemoteException | SecurityException e) {
+        // endregion
             // Do nothing
         }
         mPipListener = new TaskStackChangeListener() {
